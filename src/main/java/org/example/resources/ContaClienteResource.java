@@ -1,6 +1,7 @@
 package org.example.resources;
 
 import org.example.entities.ContaCliente;
+import org.example.entities.dtos.SearchContaClienteDto;
 import org.example.repositories.ContaClienteRepository;
 import org.example.services.ContaClienteService;
 
@@ -13,36 +14,35 @@ import java.util.Optional;
 @Path("contaCliente")
 public class ContaClienteResource {
 
-    private final ContaClienteRepository contaClienteRepository;
     private final ContaClienteService contaClienteService;
+    private final ContaClienteRepository contaClienteRepository;
 
     public ContaClienteResource() {
-        this.contaClienteRepository = new ContaClienteRepository();
         this.contaClienteService = new ContaClienteService();
+        this.contaClienteRepository = new ContaClienteRepository();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAll(
-            @QueryParam("orderBy") String orderBy,
-            @QueryParam("direction") String direction,
-            @QueryParam("limit") int limit,
-            @QueryParam("offset") int offset,
-            @QueryParam("nome") String nome,
-            @QueryParam("sobrenome") String sobrenome,
-            @QueryParam("cargo") String cargo,
-            @QueryParam("nomeEmpresa") String nomeEmpresa,
-            @QueryParam("telefone") String telefone,
-            @QueryParam("email") String email,
-            @QueryParam("cep") String cep,
-            @QueryParam("rua") String rua,
-            @QueryParam("bairro") String bairro,
-            @QueryParam("cidade") String cidade,
-            @QueryParam("estado") String estado,
-            @QueryParam("senha") String senha
-    ) {
-        return Response.ok(contaClienteService.getAll(nome, sobrenome, cargo, nomeEmpresa, telefone, email, cep,
-                rua, bairro, cidade, estado, senha, orderBy, direction, limit, offset)).build();
+    public Response getAll() {
+        // Parâmetros padrão para paginação e ordenação
+        int limit = 10; // valor ajustador conforme necessário - configuramos para 10
+        int offset = 0;
+        String orderBy = "id"; // Campo para ordenação padrão
+        String direction = "asc"; // Direção padrão para ordenação
+
+        SearchContaClienteDto result = contaClienteService.getAll(
+                null, null, null, null, null, null, null, null, null, null, null, null, null, orderBy, direction, limit, offset);
+
+        return Response.ok(result).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addCliente(ContaCliente cliente) {
+        ContaCliente novoCliente = contaClienteService.addCliente(cliente);
+        return Response.status(Response.Status.CREATED).entity(novoCliente).build();
     }
 
     @GET

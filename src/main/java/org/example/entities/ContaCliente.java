@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -13,7 +14,9 @@ import java.util.Map;
         "telefone",
         "email",
         "cep",
-        "rua",
+        "logradouro",
+        "numero",
+        "complemento",
         "bairro",
         "cidade",
         "estado",
@@ -29,18 +32,22 @@ public class ContaCliente {
     private String telefone;
     private String email;
     private String cep;
-    private String rua;
+    private String logradouro;
+    private String numero;
+    private String complemento;
     private String bairro;
     private String cidade;
     private String estado;
-    private String login;
     private String senha;
     private transient RegistroAcesso registroAcesso;
 
     public ContaCliente(){}
 
+    public ContaCliente(int id, String nome, String sobrenome, String cargo, String nomeempresa, String telefone, String email, String cep, String numero, String complemento, String bairro, String cidade, String estado, String senha){}
+
     public ContaCliente(int id, String nome, String sobrenome, String cargo, String nomeEmpresa, String telefone, String email, String cep,
-                        String rua, String bairro, String cidade, String estado, String senha) {
+                        String logradouro, String numero, String complemento,
+                        String bairro, String cidade, String estado, String senha) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -49,7 +56,9 @@ public class ContaCliente {
         this.telefone = telefone;
         this.email = email;
         this.cep = cep;
-        this.rua = rua;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.complemento = complemento;
         this.bairro = bairro;
         this.cidade = cidade;
         this.estado = estado;
@@ -57,7 +66,7 @@ public class ContaCliente {
     }
 
     public ContaCliente(int id, String nome, String sobrenome, String cargo, String nomeEmpresa, String telefone, String email, String cep,
-                        String rua, String bairro, String cidade, String estado, String senha, RegistroAcesso registroAcesso) {
+                        String logradouro, String numero, String complemento, String bairro, String cidade, String estado, String senha, RegistroAcesso registroAcesso) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -66,7 +75,9 @@ public class ContaCliente {
         this.telefone = telefone;
         this.email = email;
         this.cep = cep;
-        this.rua = rua;
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.complemento = complemento;
         this.bairro = bairro;
         this.cidade = cidade;
         this.estado = estado;
@@ -138,12 +149,28 @@ public class ContaCliente {
         this.cep = cep;
     }
 
-    public String getRua() {
-        return rua;
+    public String getLogradouro() {
+        return logradouro;
     }
 
-    public void setRua(String rua) {
-        this.rua = rua;
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getComplemento() {
+        return complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
     }
 
     public String getBairro() {
@@ -186,17 +213,26 @@ public class ContaCliente {
         this.registroAcesso = registroAcesso;
     }
 
+    // Método para verificar a senha em texto plano contra o hash armazenado
+    public boolean verificarSenha(String senha) {
+        return BCrypt.checkpw(senha, this.senha);
+    }
+
+
     @Override
     public String toString() {
         return "ContaCliente{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
+                ", sobrenome='" + sobrenome + '\'' +
                 ", cargo='" + cargo + '\'' +
                 ", nomeEmpresa='" + nomeEmpresa + '\'' +
                 ", telefone='" + telefone + '\'' +
                 ", email='" + email + '\'' +
                 ", cep='" + cep + '\'' +
-                ", rua='" + rua + '\'' +
+                ", logradouro='" + logradouro + '\'' +
+                ", numero='" + numero + '\'' +
+                ", complemento='" + complemento + '\'' +
                 ", bairro='" + bairro + '\'' +
                 ", cidade='" + cidade + '\'' +
                 ", estado='" + estado + '\'' +
@@ -213,8 +249,12 @@ public class ContaCliente {
             errors.add("Email não pode ser vazio");
         if (cep == null || cep.isBlank())
             errors.add("CEP não pode ser vazio");
-        if (rua == null || rua.isBlank())
-            errors.add("Rua não pode ser vazia");
+        if (logradouro == null || logradouro.isBlank())
+            errors.add("Logradouro não pode ser vazia");
+        if (numero == null || numero.isBlank())
+            errors.add("Número não pode ser vazia");
+        if (complemento == null || complemento.isBlank())
+            errors.add("Complemento não pode ser vazio");
         if (bairro == null || bairro.isBlank())
             errors.add("Bairro não pode ser vazio");
         if (cidade == null || cidade.isBlank())
