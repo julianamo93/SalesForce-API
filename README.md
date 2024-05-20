@@ -38,10 +38,10 @@ Em ambas IDEs, o run do projeto é pelo Application.
 - Oracle SQL Developer
 
 # Técnicas
-- Arquitetura DAO
+- Arquitetura JAX-RS
 
 # Modelo Conceitual
-![diagramJavaSprint]()
+![diagramJavaSprint](https://github.com/julianamo93/SalesForce-API/blob/master/SalesForceAPI_diagramaUML.png)
 
 ## ByteBloomTech - Integrantes
 - Juliana Moreira - RM: 554113 - Desenvolvedora Back-end Java
